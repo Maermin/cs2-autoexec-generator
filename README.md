@@ -10,6 +10,12 @@ All processing happens locally in the browser.
 
 ---
 
+## Screenshots
+<img width="1276" height="840" alt="image" src="https://github.com/user-attachments/assets/7f11b471-b40b-4ba3-9790-daee13f3ffac" />
+
+<img width="1263" height="844" alt="image" src="https://github.com/user-attachments/assets/4eb4954d-3068-4fc6-98c8-7c12d390a641" />
+
+
 ## Key Features
 
 ### Configuration Import
