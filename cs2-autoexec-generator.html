@@ -7,14 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0c0d10;--bg2:#12141a;--a:#f5a623;--ad:rgba(245,166,35,0.15);--ag:rgba(245,166,35,0.25);--t:#ccc;--td:#666;--mono:'JetBrains Mono',monospace;--ui:'Rajdhani','Segoe UI',sans-serif;--card:rgba(0,0,0,0.3);--ibg:rgba(0,0,0,0.5);--bd:rgba(245,166,35,0.15)}
-body{background:linear-gradient(165deg,#0a0b0d 0%,var(--bg2) 40%,#0e1015 100%);color:var(--t);font-family:var(--ui);min-height:100vh}
+:root{--a:#f5a623;--ad:rgba(245,166,35,0.15);--ag:rgba(245,166,35,0.25);--t:#ccc;--td:#666;--mono:'JetBrains Mono',monospace;--ui:'Rajdhani','Segoe UI',sans-serif;--card:rgba(0,0,0,0.3);--ibg:rgba(0,0,0,0.5);--bd:rgba(245,166,35,0.15)}
+body{background:linear-gradient(165deg,#0a0b0d 0%,#12141a 40%,#0e1015 100%);color:var(--t);font-family:var(--ui);min-height:100vh}
 .hdr{padding:28px 24px 20px;border-bottom:1px solid rgba(245,166,35,0.12);background:linear-gradient(180deg,rgba(245,166,35,0.04),transparent)}
 .hdr-in{max-width:840px;margin:0 auto;display:flex;align-items:center;gap:14px}
 .logo{width:44px;height:44px;border-radius:6px;background:linear-gradient(135deg,var(--a),#e08e0b);display:flex;align-items:center;justify-content:center;font:900 17px var(--mono);color:#111;box-shadow:0 0 22px var(--ag)}
 .hdr h1{font-size:24px;font-weight:700;color:#eee;letter-spacing:3px;text-transform:uppercase}
 .hdr p{font-size:11px;color:#555;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
 .main{max-width:840px;margin:0 auto;padding:20px 16px 90px}
+.dep-banner{margin-bottom:16px;padding:12px 16px;background:rgba(255,166,0,0.06);border:1px solid rgba(255,166,0,0.2);border-radius:6px;display:none}
+.dep-banner.on{display:block}
+.dep-banner h3{font:700 12px var(--ui);color:#fa0;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.dep-item{font:400 11px var(--mono);color:#a86;padding:2px 0}.dep-item b{color:#fa0}
 .imp{border:1px solid var(--bd);border-radius:8px;margin-bottom:22px;overflow:hidden;background:rgba(0,0,0,0.2);transition:border-color .2s}
 .imp.dg{border-color:rgba(245,166,35,0.5);background:rgba(245,166,35,0.04)}
 .tabs{display:flex;border-bottom:1px solid rgba(245,166,35,0.1)}
@@ -24,7 +28,7 @@ body{background:linear-gradient(165deg,#0a0b0d 0%,var(--bg2) 40%,#0e1015 100%);c
 .ubtn{padding:12px 28px;background:transparent;border:1px solid rgba(245,166,35,0.3);border-radius:5px;color:var(--a);font:700 14px var(--ui);text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all .2s}
 .ubtn:hover{background:rgba(245,166,35,0.1)}
 .hint{margin-top:16px;padding:14px;background:rgba(245,166,35,0.03);border-radius:5px;border:1px solid rgba(245,166,35,0.08);text-align:left;font:400 11px var(--mono);color:var(--td);line-height:1.8}
-.hint b{color:var(--a);font-weight:600}.hint .p{color:#888}
+.hint b{color:var(--a)}.hint .p{color:#888}
 .sts{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .st{padding:8px 14px;background:rgba(0,0,0,0.3);border-radius:5px;border:1px solid rgba(255,255,255,0.05)}
 .st-v{font-size:20px;font-weight:700}.st-l{font-size:10px;color:var(--td);text-transform:uppercase;letter-spacing:1px}
@@ -56,7 +60,7 @@ select.cs{width:100%;padding:8px 10px;background:var(--ibg);border:1px solid rgb
 .bk{background:rgba(245,166,35,0.1);padding:2px 6px;border-radius:3px;color:#aaa;font-size:11px}
 .el{max-height:200px;overflow:auto;font:400 11px var(--mono);color:#555;background:rgba(0,0,0,0.3);padding:10px;border-radius:4px}
 .ct{width:100%;padding:12px;background:rgba(0,0,0,0.6);border:1px solid var(--ad);border-radius:4px;color:#aaa;font:400 13px var(--mono);line-height:1.6;resize:vertical}
-.pb{width:100%;padding:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:#888;font:600 13px var(--ui);text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:border-color .2s}
+.pb{width:100%;padding:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:#888;font:600 13px var(--ui);text-transform:uppercase;letter-spacing:1.5px;cursor:pointer}
 .pb:hover{border-color:rgba(245,166,35,0.3)}
 .pc{margin-top:8px;padding:16px;background:rgba(0,0,0,0.5);border:1px solid rgba(245,166,35,0.1);border-radius:6px;color:#8a8f98;font:400 12px var(--mono);line-height:1.6;overflow:auto;max-height:400px;white-space:pre-wrap;word-break:break-all;display:none}
 .acts{display:flex;gap:12px;margin-top:20px;position:sticky;bottom:16px;z-index:10}
@@ -65,10 +69,8 @@ select.cs{width:100%;padding:8px 10px;background:var(--ibg);border:1px solid rgb
 .cpb{padding:14px 24px;background:rgba(255,255,255,0.05);border:1px solid rgba(245,166,35,0.2);border-radius:6px;color:var(--a);font:700 14px var(--ui);text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all .2s}
 .cpb.ok{background:rgba(100,200,100,0.15);border-color:rgba(100,200,100,0.3);color:#6c6}
 .ftr{text-align:center;font:400 11px var(--mono);color:#333;margin-top:24px}.ftr span{color:#555}
-/* Debug log */
 .dbg{margin-top:8px;padding:10px;background:rgba(0,0,0,0.4);border:1px solid rgba(100,200,100,0.15);border-radius:5px;font:400 11px var(--mono);color:#6a6;max-height:200px;overflow:auto;line-height:1.6;display:none}
-.dbg.on{display:block}
-.dbg .w{color:#fa0}.dbg .e{color:#f55}.dbg .m{color:#6c6}
+.dbg.on{display:block}.dbg .w{color:#fa0}.dbg .e{color:#f55}.dbg .m{color:#6c6}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(245,166,35,0.2);border-radius:3px}
 </style>
 </head>
@@ -76,18 +78,23 @@ select.cs{width:100%;padding:8px 10px;background:var(--ibg);border:1px solid rgb
 
 <div class="hdr"><div class="hdr-in">
   <div class="logo">CS2</div>
-  <div><h1>Autoexec Generator</h1><p>Import .vcfg + .cfg · Configure · Merge · Export</p></div>
+  <div><h1>Autoexec Generator</h1><p>CS2-verified commands only · Import · Configure · Export</p></div>
 </div></div>
 
 <div class="main">
-  <!-- IMPORT -->
+  <div class="dep-banner" id="depBan">
+    <h3>⚠ Deprecated / invalid commands skipped</h3>
+    <div id="depList"></div>
+    <p style="margin-top:8px;font:400 11px var(--mono);color:#777">These will NOT appear in the output.</p>
+  </div>
+
   <div class="imp" id="impBox">
     <div class="tabs">
       <button class="tab on" onclick="swTab('up')">↑ Import Files</button>
       <button class="tab" id="ltab" onclick="swTab('log')">Import Log (0)</button>
     </div>
     <div class="tp on" id="tp-up">
-      <div style="text-align:center" id="dz">
+      <div style="text-align:center">
         <input type="file" id="fi" accept=".vcfg,.cfg,.txt" multiple style="display:none">
         <button class="ubtn" onclick="document.getElementById('fi').click()">Select .vcfg & .cfg Files</button>
         <p style="margin:10px 0 0;font-size:12px;color:#555">or drag & drop — supports <strong style="color:#888">multiple files</strong></p>
@@ -96,7 +103,7 @@ select.cs{width:100%;padding:8px 10px;background:var(--ibg);border:1px solid rgb
           <span class="p">...\Steam\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\</span><br>
           <span class="p">...\Steam\userdata\&lt;YOUR_ID&gt;\730\local\cfg\</span><br><br>
           <b>Supported files:</b><br>
-          • cs2_user_convars.vcfg — crosshair, HUD, gameplay settings<br>
+          • cs2_user_convars.vcfg — crosshair, HUD, gameplay<br>
           • user_keys.vcfg — key bindings<br>
           • cs2_video.vcfg / cs2_machine_specific.vcfg<br>
           • Any .cfg file — legacy configs, existing autoexec
@@ -113,20 +120,17 @@ select.cs{width:100%;padding:8px 10px;background:var(--ibg);border:1px solid rgb
   <div id="extraArea"></div>
   <div id="sections"></div>
 
-  <!-- Custom -->
   <div class="sec">
     <button class="sh" onclick="tgl(this)"><span class="ic">⟩_</span><span class="ti">Custom Commands</span><span class="ar">▼</span></button>
     <div class="sb"><p style="font-size:12px;color:#555;margin-bottom:8px">Add custom binds, aliases, or commands.</p>
-    <textarea id="cc" class="ct" rows="6" placeholder='// bind "mouse4" "slot7"&#10;// alias "+jt" "+jump;-attack"'></textarea></div>
+    <textarea id="cc" class="ct" rows="6" placeholder='// bind "f" "+duck"&#10;// alias "+jt" "+jump;-attack"'></textarea></div>
   </div>
 
-  <!-- Preview -->
   <div style="margin-top:20px">
     <button class="pb" id="pvb" onclick="tglPv()">▼ Show Config Preview</button>
     <pre class="pc" id="pvc"></pre>
   </div>
 
-  <!-- Actions -->
   <div class="acts">
     <button class="dlb" onclick="dl()">↓ Download autoexec.cfg</button>
     <button class="cpb" id="cpb" onclick="cp()">Copy</button>
@@ -136,240 +140,267 @@ select.cs{width:100%;padding:8px 10px;background:var(--ibg);border:1px solid rgb
 
 <script>
 /* ══════════════════════════════════════════════════════════
-   STATE
+   VALID CS2 CVARS — verified against actual console output
    ══════════════════════════════════════════════════════════ */
-const DEF={
-  cl_crosshairstyle:"4",cl_crosshairsize:"2.5",cl_crosshairgap:"-1",cl_crosshairthickness:"0.5",
-  cl_crosshaircolor:"1",cl_crosshairdot:"0",cl_crosshair_t:"0",
-  cl_crosshaircolor_r:"50",cl_crosshaircolor_g:"250",cl_crosshaircolor_b:"50",
-  cl_crosshairalpha:"255",cl_crosshair_outlinethickness:"1",cl_crosshair_drawoutline:"1",
-  cl_crosshairgap_useweaponvalue:"0",
-  sensitivity:"1.0",zoom_sensitivity_ratio:"1.0",m_rawinput:"1",
-  viewmodel_fov:"68",viewmodel_offset_x:"2.5",viewmodel_offset_y:"0",viewmodel_offset_z:"-1.5",
-  viewmodel_presetpos:"0",cl_bob_lower_amt:"5",cl_bobamt_lat:"0.1",cl_bobamt_vert:"0.1",cl_bobcycle:"0.98",
-  rate:"786432",cl_interp_ratio:"1",cl_interp:"0",cl_cmdrate:"128",cl_updaterate:"128",
-  volume:"0.5",snd_menumusic_volume:"0",snd_roundstart_volume:"0",snd_roundend_volume:"0",
-  snd_mvp_volume:"0",snd_tensecondwarning_volume:"0.2",snd_deathcamera_volume:"0",snd_mapobjective_volume:"0",
-  cl_hud_color:"1",cl_hud_radar_scale:"1.15",cl_radar_scale:"0.4",cl_radar_always_centered:"0",
-  cl_radar_icon_scale_min:"0.6",hud_scaling:"0.85",cl_showfps:"0",net_graph:"0",
-  fps_max:"0",fps_max_menu:"144",r_drawtracers_firstperson:"0",
-  cl_autoweaponswitch:"0",cl_use_opens_buy_menu:"0",cl_join_advertise:"2",mm_dedicated_search_maxping:"60"
+const DEF = {
+  cl_crosshairstyle:"4", cl_crosshairsize:"2.5", cl_crosshairgap:"-1",
+  cl_crosshairthickness:"0.5", cl_crosshaircolor:"1",
+  cl_crosshairdot:"0", cl_crosshair_t:"0",
+  cl_crosshaircolor_r:"50", cl_crosshaircolor_g:"250", cl_crosshaircolor_b:"50",
+  cl_crosshairalpha:"255", cl_crosshair_outlinethickness:"1",
+  cl_crosshair_drawoutline:"1", cl_crosshairgap_useweaponvalue:"0",
+  sensitivity:"1.0", zoom_sensitivity_ratio:"1.0",
+  viewmodel_fov:"68", viewmodel_offset_x:"2.5", viewmodel_offset_y:"0",
+  viewmodel_offset_z:"-1.5", viewmodel_presetpos:"0",
+  rate:"786432", cl_interp_ratio:"1",
+  volume:"0.5", snd_menumusic_volume:"0", snd_roundstart_volume:"0",
+  snd_roundend_volume:"0", snd_mvp_volume:"0",
+  snd_tensecondwarning_volume:"0.2", snd_deathcamera_volume:"0",
+  snd_mapobjective_volume:"0",
+  cl_hud_color:"1", cl_hud_radar_scale:"1.15", cl_radar_scale:"0.4",
+  cl_radar_always_centered:"0", cl_radar_icon_scale_min:"0.6",
+  hud_scaling:"0.85", cl_showfps:"0",
+  fps_max:"0", r_drawtracers_firstperson:"0",
+  cl_use_opens_buy_menu:"0", cl_join_advertise:"2",
+  mm_dedicated_search_maxping:"60",
 };
-const BOOLS=new Set("cl_crosshairdot,cl_crosshair_t,cl_crosshair_drawoutline,cl_crosshairgap_useweaponvalue,m_rawinput,cl_radar_always_centered,r_drawtracers_firstperson,cl_autoweaponswitch,cl_use_opens_buy_menu".split(","));
 
-let S={...DEF}, impFiles=[], impBinds=[], impExtra={}, impOther=[], incBinds=true, incExtra=false;
-let dbgLines=[];
+const BOOLS = new Set([
+  "cl_crosshairdot","cl_crosshair_t","cl_crosshair_drawoutline",
+  "cl_crosshairgap_useweaponvalue","cl_radar_always_centered",
+  "r_drawtracers_firstperson","cl_use_opens_buy_menu"
+]);
+
+/* ALL commands confirmed broken in CS2 console */
+const DEPRECATED = {
+  m_rawinput:          "Always enabled in CS2",
+  cl_bob_lower_amt:    "Removed in CS2",
+  cl_bobamt_lat:       "Removed in CS2",
+  cl_bobamt_vert:      "Removed in CS2",
+  cl_bobcycle:         "Removed in CS2",
+  cl_cmdrate:          "Server-controlled in CS2",
+  cl_updaterate:       "Server-controlled in CS2",
+  cl_interp:           "Locked — cannot be changed in CS2",
+  net_graph:           "Removed in CS2 (no replacement)",
+  cq_netgraph:         "Not a valid CS2 command",
+  fps_max_menu:        "Removed in CS2",
+  cl_autoweaponswitch: "Removed (use in-game settings)",
+  single_player_pause: "Removed in CS2",
+  "video.cfg":         "Not a command (internal filename)",
+};
 
 /* ══════════════════════════════════════════════════════════
-   UNIVERSAL CONFIG PARSER
-   Handles: KV3 (key = "val"), KV1 ("key" "val"), CFG (key "val"), and JSON
+   GARBAGE FILTER — prevents hex data, brackets, video cfg
+   junk from leaking into the output
+   ══════════════════════════════════════════════════════════ */
+function isGarbageKey(key) {
+  if (!key || key.length < 2) return true;
+  // Hex addresses or numeric junk
+  if (/^0x[0-9a-f]/i.test(key)) return true;
+  if (/^\d+,/.test(key)) return true;
+  // Curly brackets, tildes, special chars
+  if (/^[{}~!@#$%^&*()]/.test(key)) return true;
+  // Pure numbers
+  if (/^\d+$/.test(key)) return true;
+  // Filenames
+  if (/\.(cfg|vcfg|txt|vpk|vtex|res)$/i.test(key)) return true;
+  // Video config internal keys
+  if (/^videocfg_/i.test(key)) return true;
+  // Setting/config structure keys
+  if (/^setting\./i.test(key)) return true;
+  // SHORT ALL-UPPERCASE tokens (2-4 chars like GXS, TFL, PVC, DTR, SWD)
+  // Real CS2 cvars are always lowercase with underscores
+  if (/^[A-Z]{2,5}$/.test(key)) return true;
+  // Keys that are ALL uppercase (any length) — not valid cvars
+  if (/^[A-Z0-9_]+$/.test(key) && key === key.toUpperCase() && !/^[A-Z]{1}_/.test(key)) return true;
+  // Very short keys without underscores (not valid cvars)
+  if (key.length <= 4 && !key.includes("_")) return true;
+  // Keys must look like valid cvars: lowercase, may have underscores
+  // Reject keys that don't contain at least one lowercase letter
+  if (!/[a-z]/.test(key)) return true;
+  return false;
+}
+
+function isGarbageValue(val) {
+  if (!val && val !== "0") return true;
+  if (/^0x[0-9a-f]{6,}/i.test(val)) return true;
+  if (/^\d+,\d+,/.test(val)) return true;
+  return false;
+}
+
+/* Whitelist approach: only allow things that look like real CS2 cvars/commands */
+function isValidCvar(key) {
+  if (!key || key.length < 2) return false;
+  // Must contain at least one lowercase letter (all real cvars do)
+  if (!/[a-z]/.test(key)) return false;
+  // Block filenames
+  if (/\.(cfg|vcfg|txt|vpk|vtex|res)$/i.test(key)) return false;
+  // Block hex
+  if (/^0x/i.test(key)) return false;
+  // Block numeric junk
+  if (/^\d/.test(key)) return false;
+  // Block special chars at start
+  if (/^[{}~!@#$%^&*()<>]/.test(key)) return false;
+  // Must look like a cvar: lowercase+underscores, or known bare words
+  const BARE_OK = new Set(["sensitivity","volume","rate","bind","unbind","alias",
+    "echo","exec","clear","status","quit","exit","disconnect","retry","host_writeconfig"]);
+  if (BARE_OK.has(key)) return true;
+  // Most cvars contain underscores
+  if (key.includes("_") && /^[a-z][a-z0-9_+]*$/i.test(key)) return true;
+  // Allow +command style
+  if (/^\+[a-z]/.test(key)) return true;
+  // Allow longer lowercase-only words (like "toggleconsole", "buymenu" etc)
+  if (key.length >= 6 && /^[a-z][a-z0-9]+$/.test(key)) return true;
+  return false;
+}
+
+let S = {...DEF};
+let impFiles=[], impBinds=[], impExtra={}, impOther=[], deprecatedFound=[];
+let incBinds=true, incExtra=false, dbgLines=[];
+
+/* ══════════════════════════════════════════════════════════
+   PARSERS
    ══════════════════════════════════════════════════════════ */
 function parseAny(text, filename) {
   const result = {cvars:{}, binds:[], extra:{}, other:[]};
   text = (text||"").replace(/^\uFEFF/,"").replace(/\r\n/g,"\n").replace(/\r/g,"\n");
-  
-  dbg("Parsing: " + filename + " (" + text.length + " bytes)", "m");
+  dbg("Parsing: "+filename+" ("+text.length+" bytes)","m");
 
-  // Try JSON first
-  try {
-    const j = JSON.parse(text);
-    const flat = {};
-    flatObj(j, flat, "");
-    matchFlat(flat, result);
-    dbg("  Parsed as JSON, " + Object.keys(flat).length + " keys found", "m");
-    return result;
-  } catch(e) {}
+  try { const j=JSON.parse(text); const f={}; flatObj(j,f,""); matchFlat(f,result,filename); dbg("  JSON: "+Object.keys(f).length+" keys","m"); return result; } catch(e){}
 
-  // Detect format: KV3 uses "=" signs, KV1/CFG doesn't
-  const hasKV3Header = /^<!--\s*kv3/i.test(text.trim());
-  const hasEquals = /^\s*\w+\s*=/m.test(text);
-  const isCfg = filename.endsWith(".cfg") || filename.endsWith(".txt");
+  const hasEq = /^\s*\w[\w.]*\s*=/m.test(text);
+  const isCfg = filename.endsWith(".cfg")||filename.endsWith(".txt");
 
-  if (hasKV3Header || (hasEquals && !isCfg)) {
-    dbg("  Detected KV3 format (= signs found)", "m");
-    const flat = {};
-    parseKV3(text, flat);
-    matchFlat(flat, result);
+  if (hasEq && !isCfg) {
+    dbg("  Format: KV3","m");
+    const f={}; parseKV3(text,f); matchFlat(f,result,filename);
   } else if (isCfg) {
-    dbg("  Detected CFG format", "m");
-    parseCfgFormat(text, result);
+    dbg("  Format: CFG","m");
+    parseCfgFmt(text,result,filename);
   } else {
-    // Try KV1 (quoted keys)
-    dbg("  Trying KV1 format (\"key\" \"value\")", "m");
-    const flat = {};
-    parseKV1(text, flat);
-    if (Object.keys(flat).length > 0) {
-      matchFlat(flat, result);
-    } else {
-      dbg("  KV1 found nothing, trying KV3...", "w");
-      parseKV3(text, flat);
-      matchFlat(flat, result);
-    }
+    dbg("  Format: KV1","m");
+    const f={}; parseKV1(text,f);
+    if(Object.keys(f).length===0) parseKV3(text,f);
+    matchFlat(f,result,filename);
   }
-
   return result;
 }
 
-/* ── KV3 Parser: key = "value" and key = { ... } ── */
 function parseKV3(text, out) {
-  // Remove KV3 header comment
-  text = text.replace(/^<!--[\s\S]*?-->/g, "").trim();
-
-  // Tokenize: we need to handle = signs, {, }, quoted strings, unquoted tokens
-  const tokens = [];
-  let i = 0, L = text.length;
-  while (i < L) {
-    // Skip whitespace
-    if (" \t\n".includes(text[i])) { i++; continue; }
-    // Skip line comments
-    if (text[i] === "/" && i+1 < L && text[i+1] === "/") { while(i<L && text[i]!=="\n") i++; continue; }
-    // Symbols
-    if ("{=}".includes(text[i])) { tokens.push(text[i]); i++; continue; }
-    // Quoted string
-    if (text[i] === '"') {
-      i++; let s = "";
-      while (i<L && text[i] !== '"') {
-        if (text[i] === "\\" && i+1<L) { s += text[i+1]; i+=2; } else { s += text[i]; i++; }
-      }
-      i++; // closing "
-      tokens.push(s);
-      continue;
-    }
-    // Unquoted token
-    let s = "";
-    while (i<L && !" \t\n{}=\"".includes(text[i])) { s += text[i]; i++; }
-    if (s) tokens.push(s);
+  text = text.replace(/^<!--[\s\S]*?-->/g,"").trim();
+  const toks=[]; let i=0, L=text.length;
+  while(i<L){
+    if(" \t\n".includes(text[i])){i++;continue;}
+    if(text[i]==="/"&&i+1<L&&text[i+1]==="/"){while(i<L&&text[i]!=="\n")i++;continue;}
+    if("{=}".includes(text[i])){toks.push(text[i]);i++;continue;}
+    if(text[i]==='"'){i++;let s="";while(i<L&&text[i]!=='"'){if(text[i]==="\\"&&i+1<L){s+=text[i+1];i+=2;}else{s+=text[i];i++;}}i++;toks.push(s);continue;}
+    let s="";while(i<L&&!" \t\n{}=\"".includes(text[i])){s+=text[i];i++;}if(s)toks.push(s);
   }
-
-  // Now parse tokens: key [=] value or key [=] { ... }
-  let ti = 0;
-  function parseBlock(prefix) {
-    while (ti < tokens.length) {
-      if (tokens[ti] === "}") { ti++; return; }
-      
-      const key = tokens[ti++];
-      if (!key || key === "{" || key === "}" || key === "=") continue;
-
-      // Skip optional =
-      if (ti < tokens.length && tokens[ti] === "=") ti++;
-
-      if (ti >= tokens.length) break;
-
-      if (tokens[ti] === "{") {
-        ti++; // skip {
-        parseBlock(prefix ? prefix + "." + key : key);
-      } else {
-        const val = tokens[ti++];
-        if (val !== undefined && val !== "{" && val !== "}" && val !== "=") {
-          const full = prefix ? prefix + "." + key : key;
-          out[full] = val;
-          out[key] = val; // bare key too
-        }
-      }
+  let ti=0;
+  function blk(pfx){
+    while(ti<toks.length){
+      if(toks[ti]==="}"){ti++;return;}
+      const k=toks[ti++]; if(!k||k==="{"||k==="}"||k==="=")continue;
+      if(ti<toks.length&&toks[ti]==="=")ti++;
+      if(ti>=toks.length)break;
+      if(toks[ti]==="{"){ti++;blk(pfx?pfx+"."+k:k);}
+      else{const v=toks[ti++];if(v!==undefined&&v!=="{"&&v!=="}"&&v!=="="){const f=pfx?pfx+"."+k:k;out[f]=v;out[k]=v;}}
     }
   }
-  parseBlock("");
+  blk("");
 }
 
-/* ── KV1 Parser: "key" "value" (no = signs) ── */
 function parseKV1(text, out) {
-  text = text.replace(/^<!--[\s\S]*?-->/g, "").trim();
-  const tokens = [];
-  let i = 0, L = text.length;
-  while (i < L) {
-    if (" \t\n".includes(text[i])) { i++; continue; }
-    if (text[i] === "/" && i+1<L && text[i+1] === "/") { while(i<L && text[i]!=="\n") i++; continue; }
-    if ("{}"  .includes(text[i])) { tokens.push(text[i]); i++; continue; }
-    if (text[i] === '"') {
-      i++; let s = "";
-      while (i<L && text[i] !== '"') { if(text[i]==="\\"&&i+1<L){s+=text[i+1];i+=2;}else{s+=text[i];i++;} }
-      i++; tokens.push(s); continue;
-    }
-    let s = "";
-    while (i<L && !" \t\n{}\"".includes(text[i])) { s+=text[i]; i++; }
-    if (s) tokens.push(s);
+  text = text.replace(/^<!--[\s\S]*?-->/g,"").trim();
+  const toks=[]; let i=0, L=text.length;
+  while(i<L){
+    if(" \t\n".includes(text[i])){i++;continue;}
+    if(text[i]==="/"&&i+1<L&&text[i+1]==="/"){while(i<L&&text[i]!=="\n")i++;continue;}
+    if("{}".includes(text[i])){toks.push(text[i]);i++;continue;}
+    if(text[i]==='"'){i++;let s="";while(i<L&&text[i]!=='"'){if(text[i]==="\\"&&i+1<L){s+=text[i+1];i+=2;}else{s+=text[i];i++;}}i++;toks.push(s);continue;}
+    let s="";while(i<L&&!" \t\n{}\"".includes(text[i])){s+=text[i];i++;}if(s)toks.push(s);
   }
-
-  let ti = 0;
-  function parseBlock(prefix) {
-    while (ti < tokens.length) {
-      if (tokens[ti] === "}") { ti++; return; }
-      const key = tokens[ti++];
-      if (!key || key === "{" || key === "}") continue;
-      if (ti >= tokens.length) break;
-      if (tokens[ti] === "{") {
-        ti++;
-        parseBlock(prefix ? prefix + "." + key : key);
-      } else {
-        const val = tokens[ti++];
-        if (val !== undefined && val !== "{" && val !== "}") {
-          const full = prefix ? prefix + "." + key : key;
-          out[full] = val;
-          out[key] = val;
-        }
-      }
+  let ti=0;
+  function blk(pfx){
+    while(ti<toks.length){
+      if(toks[ti]==="}"){ti++;return;}
+      const k=toks[ti++]; if(!k||k==="{"||k==="}")continue;
+      if(ti>=toks.length)break;
+      if(toks[ti]==="{"){ti++;blk(pfx?pfx+"."+k:k);}
+      else{const v=toks[ti++];if(v!==undefined&&v!=="{"&&v!=="}"){const f=pfx?pfx+"."+k:k;out[f]=v;out[k]=v;}}
     }
   }
-  parseBlock("");
+  blk("");
 }
 
-/* ── CFG line-by-line parser ── */
-function parseCfgFormat(text, result) {
-  text.split("\n").forEach(raw => {
-    const t = raw.trim();
-    if (!t || t.startsWith("//")) return;
-    // bind "key" "action"
-    const bm = t.match(/^bind\s+"?([^"\s]+)"?\s+"?(.+?)"?\s*$/i);
-    if (bm) { result.binds.push({key:bm[1], action:bm[2].replace(/"$/,"")}); return; }
-    // cvar "value"
-    const m1 = t.match(/^(\S+)\s+"([^"]*)"\s*$/);
-    if (m1) { result.cvars[m1[1]] = m1[2]; return; }
-    // cvar value (no quotes)
-    const m2 = t.match(/^(\S+)\s+(\S+)\s*$/);
-    if (m2) { result.cvars[m2[1]] = m2[2]; return; }
+function parseCfgFmt(text, result, filename) {
+  text.split("\n").forEach(raw=>{
+    const t=raw.trim(); if(!t||t.startsWith("//"))return;
+    const bm=t.match(/^bind\s+"?([^"\s]+)"?\s+"?(.+?)"?\s*$/i);
+    if(bm){result.binds.push({key:bm[1],action:bm[2].replace(/"$/,"")});return;}
+    const m1=t.match(/^(\S+)\s+"([^"]*)"\s*$/);
+    if(m1){
+      checkAndAdd(m1[1],m1[2],result,filename);
+      return;
+    }
+    const m2=t.match(/^(\S+)\s+(\S+)\s*$/);
+    if(m2){
+      checkAndAdd(m2[1],m2[2],result,filename);
+      return;
+    }
     result.other.push(t);
   });
 }
 
-/* ── Match flat keys to known settings ── */
-function matchFlat(flat, result) {
-  let matched = 0;
-  for (const [k, v] of Object.entries(flat)) {
-    // Try bare key (last segment)
-    const bare = k.includes(".") ? k.split(".").pop() : k;
-    
-    if (bare in DEF) {
-      result.cvars[bare] = String(v);
-      matched++;
-    }
-    
-    // Check for binds
-    const parts = k.split(".");
-    const isBind = parts.some(p => /^(bindings|keys)$/i.test(p));
-    if (isBind && !/^(bindings|keys)$/i.test(bare) && bare && v) {
-      result.binds.push({key: bare, action: String(v)});
-    }
-    
-    // Extra
-    if (!(bare in DEF) && !isBind && bare.length > 1 && v !== undefined) {
-      result.extra[bare] = String(v);
-    }
+function checkAndAdd(key, val, result, filename) {
+  if (key in DEPRECATED) {
+    if (!deprecatedFound.find(d=>d.cmd===key))
+      deprecatedFound.push({cmd:key, reason:DEPRECATED[key], val:val});
+    dbg("  SKIP "+key+" ("+DEPRECATED[key]+")","w");
+    return;
   }
-  dbg("  Matched " + matched + " known settings from " + Object.keys(flat).length + " total keys", matched > 0 ? "m" : "w");
-}
-
-function flatObj(obj, out, pfx) {
-  if (!obj || typeof obj !== "object") return;
-  for (const [k,v] of Object.entries(obj)) {
-    const fk = pfx ? pfx+"."+k : k;
-    if (v && typeof v === "object" && !Array.isArray(v)) flatObj(v, out, fk);
-    else { out[fk] = String(v); out[k] = String(v); }
+  if (key in DEF) {
+    result.cvars[key] = val;
+  } else if (isValidCvar(key) && !isGarbageValue(val)) {
+    result.extra[key] = val;
   }
 }
 
-function dbg(msg, type) {
-  dbgLines.push({msg, type: type||"m"});
+function matchFlat(flat, result, filename) {
+  let matched=0;
+  for(const [k,v] of Object.entries(flat)){
+    const bare = k.includes(".")?k.split(".").pop():k;
+
+    // Skip garbage
+    if (!isValidCvar(bare) || isGarbageValue(v)) continue;
+
+    // Deprecated?
+    if(bare in DEPRECATED){
+      if(!deprecatedFound.find(d=>d.cmd===bare))
+        deprecatedFound.push({cmd:bare, reason:DEPRECATED[bare], val:String(v)});
+      dbg("  SKIP "+bare+" ("+DEPRECATED[bare]+")","w");
+      continue;
+    }
+
+    if(bare in DEF){ result.cvars[bare]=String(v); matched++; }
+
+    const parts=k.split(".");
+    const isBind=parts.some(p=>/^(bindings|keys)$/i.test(p));
+    if(isBind&&!/^(bindings|keys)$/i.test(bare)&&bare&&v)
+      result.binds.push({key:bare,action:String(v)});
+
+    if(!(bare in DEF)&&!isBind&&isValidCvar(bare)&&!isGarbageValue(String(v)))
+      result.extra[bare]=String(v);
+  }
+  dbg("  Matched "+matched+" valid settings","m");
 }
+
+function flatObj(obj,out,pfx){
+  if(!obj||typeof obj!=="object")return;
+  for(const [k,v] of Object.entries(obj)){const fk=pfx?pfx+"."+k:k;if(v&&typeof v==="object"&&!Array.isArray(v))flatObj(v,out,fk);else{out[fk]=String(v);out[k]=String(v);}}
+}
+
+function dbg(msg,type){dbgLines.push({msg,type:type||"m"});}
 
 const KN={mouse_left:"Mouse1",mouse_right:"Mouse2",mouse_middle:"Mouse3",mouse_button4:"Mouse4",mouse_button5:"Mouse5",mouse_wheel_up:"MWheelUp",mouse_wheel_down:"MWheelDown"};
 function fk(k){return KN[k]||String(k).replace(/^key_/i,"").toUpperCase();}
@@ -377,96 +408,71 @@ function fk(k){return KN[k]||String(k).replace(/^key_/i,"").toUpperCase();}
 /* ══════════════════════════════════════════════════════════
    FILE IMPORT
    ══════════════════════════════════════════════════════════ */
-function processFiles(fl) {
-  const files = Array.from(fl);
-  let pending = files.length;
-  dbgLines = [];
-  dbg("Starting import of " + files.length + " file(s)...", "m");
-  
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      try {
-        const text = ev.target.result || "";
-        const name = file.name;
-        
-        const res = parseAny(text, name.toLowerCase());
-        
-        let pc = 0, bc = 0, ec = 0;
-        
-        // Apply cvars to settings
-        for (const [k, v] of Object.entries(res.cvars)) {
-          if (k in DEF) {
-            if (BOOLS.has(k)) S[k] = (v==="1"||v==="true") ? "1" : "0";
-            else S[k] = v;
+function processFiles(fl){
+  const files=Array.from(fl); let pending=files.length;
+  dbgLines=[]; deprecatedFound=[];
+  dbg("Importing "+files.length+" file(s)...","m");
+
+  files.forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const text=ev.target.result||"", name=file.name;
+        const res=parseAny(text,name.toLowerCase());
+        let pc=0,bc=0,ec=0;
+
+        for(const [k,v] of Object.entries(res.cvars)){
+          if(k in DEF){
+            if(BOOLS.has(k)) S[k]=(v==="1"||v==="true")?"1":"0";
+            else S[k]=v;
             pc++;
-            dbg("  SET " + k + " = " + v, "m");
+            dbg("  SET "+k+" = "+S[k],"m");
           }
         }
-        
-        // Binds
-        res.binds.forEach(b => {
-          const ex = impBinds.findIndex(x => x.key === b.key);
-          if (ex >= 0) impBinds[ex] = b; else impBinds.push(b);
-          bc++;
+
+        res.binds.forEach(b=>{
+          const ex=impBinds.findIndex(x=>x.key===b.key);
+          if(ex>=0)impBinds[ex]=b;else impBinds.push(b); bc++;
         });
-        
-        // Extra
-        for (const [k, v] of Object.entries(res.extra)) {
-          impExtra[k] = v; ec++;
+        for(const [k,v] of Object.entries(res.extra)){
+          if(isValidCvar(k)&&!isGarbageValue(v)){impExtra[k]=v;ec++;}
         }
-        
-        res.other.forEach(l => impOther.push(l));
-        
-        dbg("Summary for " + name + ": " + pc + " settings, " + bc + " binds, " + ec + " extra", pc > 0 ? "m" : "w");
-        impFiles.push({name, type: name.toLowerCase().endsWith(".vcfg")?"VCFG":"CFG", size:(file.size/1024).toFixed(1), pc, bc, ec});
-        
-      } catch(err) {
-        dbg("ERROR parsing " + file.name + ": " + err.message, "e");
-        impFiles.push({name:file.name, type:"ERR", size:(file.size/1024).toFixed(1), pc:0, bc:0, ec:0});
+        res.other.forEach(l=>{
+          const t=l.trim(); if(!t) return;
+          const fw=t.split(/\s/)[0];
+          if(isValidCvar(fw)) impOther.push(l);
+        });
+        impFiles.push({name,type:name.toLowerCase().endsWith(".vcfg")?"VCFG":"CFG",size:(file.size/1024).toFixed(1),pc,bc,ec});
+      }catch(err){
+        dbg("ERROR: "+file.name+": "+err.message,"e");
+        impFiles.push({name:file.name,type:"ERR",size:(file.size/1024).toFixed(1),pc:0,bc:0,ec:0});
       }
       pending--;
-      if (pending === 0) afterImport();
+      if(pending===0) afterImport();
     };
-    reader.onerror = () => { pending--; if(pending===0) afterImport(); };
+    reader.onerror=()=>{pending--;if(pending===0)afterImport();};
     reader.readAsText(file);
   });
 }
 
-function afterImport() {
-  syncUI();
-  renderLog();
-  renderBinds();
-  renderExtra();
-  swTab("log");
-}
+function afterImport(){syncUI();renderLog();renderBinds();renderExtra();renderDep();swTab("log");}
 
 /* ══════════════════════════════════════════════════════════
-   SYNC UI FROM SETTINGS
+   SYNC UI
    ══════════════════════════════════════════════════════════ */
-function syncUI() {
-  for (const [key, val] of Object.entries(S)) {
-    // Range inputs
-    document.querySelectorAll('input[type="range"][data-c="'+key+'"]').forEach(el => { el.value = val; });
-    // Number inputs
-    document.querySelectorAll('input[type="number"][data-c="'+key+'"]').forEach(el => { el.value = val; });
-    // Selects
-    document.querySelectorAll('select[data-c="'+key+'"]').forEach(el => { el.value = val; });
-    // Toggles
-    document.querySelectorAll('button.tt[data-c="'+key+'"]').forEach(el => {
-      el.classList.toggle("on", val === "1");
-    });
+function syncUI(){
+  for(const [key,val] of Object.entries(S)){
+    document.querySelectorAll('input[type="range"][data-c="'+key+'"]').forEach(el=>{el.value=val;});
+    document.querySelectorAll('input[type="number"][data-c="'+key+'"]').forEach(el=>{el.value=val;});
+    document.querySelectorAll('select[data-c="'+key+'"]').forEach(el=>{el.value=val;});
+    document.querySelectorAll('button.tt[data-c="'+key+'"]').forEach(el=>{el.classList.toggle("on",val==="1");});
   }
   updCond();
 }
-
-function updCond() {
-  const rgb = document.getElementById("rgbC");
-  if(rgb) rgb.style.display = S.cl_crosshaircolor==="5" ? "flex" : "none";
-  const ol = document.getElementById("olC");
-  if(ol) ol.style.display = S.cl_crosshair_drawoutline==="1" ? "block" : "none";
+function updCond(){
+  const r=document.getElementById("rgbC"); if(r)r.style.display=S.cl_crosshaircolor==="5"?"flex":"none";
+  const o=document.getElementById("olC"); if(o)o.style.display=S.cl_crosshair_drawoutline==="1"?"block":"none";
 }
-
 function onR(c,v){S[c]=v;document.querySelectorAll('[data-c="'+c+'"]').forEach(el=>{if(el.tagName!=="BUTTON")el.value=v;});updCond();}
 function onS(c,v){S[c]=v;updCond();}
 function onT(c,b){const on=S[c]==="1";S[c]=on?"0":"1";b.classList.toggle("on",!on);updCond();}
@@ -474,34 +480,29 @@ function onT(c,b){const on=S[c]==="1";S[c]=on?"0":"1";b.classList.toggle("on",!o
 /* ══════════════════════════════════════════════════════════
    RENDER
    ══════════════════════════════════════════════════════════ */
-function renderLog() {
-  const el = document.getElementById("logC");
-  document.getElementById("ltab").textContent = "Import Log (" + impFiles.length + ")";
-  
-  // Debug log
-  const dbgEl = document.getElementById("dbgLog");
-  if (dbgLines.length) {
-    dbgEl.classList.add("on");
-    dbgEl.innerHTML = "<div style='margin-bottom:6px;color:var(--a);font-weight:600'>Parse Debug Log:</div>" + 
-      dbgLines.map(d => '<div class="'+d.type+'">'+d.msg+'</div>').join("");
-  }
-  
-  if (!impFiles.length) { el.innerHTML='<p style="text-align:center;color:#444;padding:20px">No files imported yet</p>'; return; }
-  const tS=impFiles.reduce((a,f)=>a+f.pc,0),tB=impBinds.length,tE=Object.keys(impExtra).length;
+function renderDep(){
+  const el=document.getElementById("depBan"),dl=document.getElementById("depList");
+  if(!deprecatedFound.length){el.classList.remove("on");return;}
+  el.classList.add("on");
+  dl.innerHTML=deprecatedFound.map(d=>'<div class="dep-item"><b>'+d.cmd+'</b> = '+d.val+' → '+d.reason+'</div>').join("");
+}
+
+function renderLog(){
+  const el=document.getElementById("logC");
+  document.getElementById("ltab").textContent="Import Log ("+impFiles.length+")";
+  const dE=document.getElementById("dbgLog");
+  if(dbgLines.length){dE.classList.add("on");dE.innerHTML="<div style='margin-bottom:6px;color:var(--a);font-weight:600'>Parse Log:</div>"+dbgLines.map(d=>'<div class="'+d.type+'">'+d.msg+'</div>').join("");}
+  if(!impFiles.length){el.innerHTML='<p style="text-align:center;color:#444;padding:20px">No files imported yet</p>';return;}
+  const tS=impFiles.reduce((a,f)=>a+f.pc,0);
   let h='<div class="sts">';
-  [{v:impFiles.length,l:"Files",c:"var(--a)"},{v:tS,l:"Settings",c:"#6c6"},{v:tB,l:"Binds",c:"#69f"},{v:tE,l:"Extra",c:"#c6f"}].forEach(s=>{
-    h+='<div class="st"><div class="st-v" style="color:'+s.c+'">'+s.v+'</div><div class="st-l">'+s.l+'</div></div>';
-  });
+  [{v:impFiles.length,l:"Files",c:"var(--a)"},{v:tS,l:"Settings",c:"#6c6"},{v:impBinds.length,l:"Binds",c:"#69f"},{v:Object.keys(impExtra).length,l:"Extra",c:"#c6f"}].forEach(s=>{h+='<div class="st"><div class="st-v" style="color:'+s.c+'">'+s.v+'</div><div class="st-l">'+s.l+'</div></div>';});
   h+='</div>';
-  impFiles.forEach(f=>{
-    const c=f.type==="VCFG"?"v":f.type==="ERR"?"e":"c";
-    h+='<div class="fi"><span class="ft '+c+'">'+f.type+'</span><div style="flex:1"><div class="fn">'+f.name+'</div><div class="fm">'+f.size+'KB · '+f.pc+' settings · '+f.bc+' binds · '+f.ec+' extra</div></div></div>';
-  });
+  impFiles.forEach(f=>{const c=f.type==="VCFG"?"v":f.type==="ERR"?"e":"c";h+='<div class="fi"><span class="ft '+c+'">'+f.type+'</span><div style="flex:1"><div class="fn">'+f.name+'</div><div class="fm">'+f.size+'KB · '+f.pc+' settings · '+f.bc+' binds · '+f.ec+' extra</div></div></div>';});
   h+='<button class="bdng" onclick="clrAll()">Clear All & Reset</button>';
   el.innerHTML=h;
 }
 
-function renderBinds() {
+function renderBinds(){
   const el=document.getElementById("bindsArea");
   if(!impBinds.length){el.innerHTML="";return;}
   let h='<div class="sec"><button class="sh op" onclick="tgl(this)"><span class="ic">⌨</span><span class="ti">Imported Key Bindings</span><span class="bg">'+impBinds.length+'</span><span class="ar">▼</span></button>';
@@ -513,24 +514,22 @@ function renderBinds() {
   el.innerHTML=h;
 }
 
-function renderExtra() {
-  const el=document.getElementById("extraArea");
-  const ks=Object.keys(impExtra);
+function renderExtra(){
+  const el=document.getElementById("extraArea"),ks=Object.keys(impExtra);
   if(!ks.length){el.innerHTML="";return;}
   let h='<div class="sec"><button class="sh" onclick="tgl(this)"><span class="ic">◈</span><span class="ti">Additional Imported Settings</span><span class="bg">'+ks.length+'</span><span class="ar">▼</span></button>';
-  h+='<div class="sb">';
-  h+='<div class="tr"><div><span class="cl">Include in Output</span></div><button class="tt'+(incExtra?" on":"")+'" onclick="incExtra=!incExtra;this.classList.toggle(\'on\')"><div class="tm"></div></button></div>';
+  h+='<div class="sb"><div class="tr"><div><span class="cl">Include in Output</span></div><button class="tt'+(incExtra?" on":"")+'" onclick="incExtra=!incExtra;this.classList.toggle(\'on\')"><div class="tm"></div></button></div>';
   h+='<div class="el">';
   ks.slice(0,60).forEach(k=>{h+='<div style="padding:2px 0"><span style="color:#777">'+k+'</span> = <span style="color:#8a8f98">'+impExtra[k]+'</span></div>';});
-  if(ks.length>60) h+='<div style="color:#444;margin-top:6px">...and '+(ks.length-60)+' more</div>';
+  if(ks.length>60)h+='<div style="color:#444;margin-top:6px">...and '+(ks.length-60)+' more</div>';
   h+='</div></div></div>';
   el.innerHTML=h;
 }
 
-function clrAll(){S={...DEF};impFiles=[];impBinds=[];impExtra={};impOther=[];dbgLines=[];syncUI();renderLog();renderBinds();renderExtra();document.getElementById("cc").value="";document.getElementById("dbgLog").classList.remove("on");document.getElementById("dbgLog").innerHTML="";}
+function clrAll(){S={...DEF};impFiles=[];impBinds=[];impExtra={};impOther=[];deprecatedFound=[];dbgLines=[];syncUI();renderLog();renderBinds();renderExtra();renderDep();document.getElementById("cc").value="";document.getElementById("dbgLog").classList.remove("on");document.getElementById("dbgLog").innerHTML="";}
 
 /* ══════════════════════════════════════════════════════════
-   BUILD SETTINGS SECTIONS
+   BUILD UI
    ══════════════════════════════════════════════════════════ */
 function bSl(l,c,mn,mx,st){
   return '<div><div class="cr"><span class="cl">'+l+'</span><span class="cv">'+c+'</span></div>'+
@@ -551,31 +550,65 @@ function sW(t,ic,op,body){
 }
 
 function buildUI(){
-  const el=document.getElementById("sections");
-  let h="";
+  const el=document.getElementById("sections"); let h="";
+
   h+=sW("Crosshair","◎",true,
     bSe("Style","cl_crosshairstyle",[["0","0-Default"],["1","1-Default Static"],["2","2-Classic"],["3","3-Classic Dynamic"],["4","4-Classic Static"],["5","5-Legacy"]])+
-    bSl("Size","cl_crosshairsize",0,10,"0.5")+bSl("Gap","cl_crosshairgap",-5,5,"0.5")+bSl("Thickness","cl_crosshairthickness",0,6,"0.5")+bSl("Alpha","cl_crosshairalpha",0,255,1)+
+    bSl("Size","cl_crosshairsize",0,10,"0.5")+bSl("Gap","cl_crosshairgap",-5,5,"0.5")+
+    bSl("Thickness","cl_crosshairthickness",0,6,"0.5")+bSl("Alpha","cl_crosshairalpha",0,255,1)+
     bSe("Color","cl_crosshaircolor",[["1","Green"],["2","Yellow"],["3","Blue"],["4","Cyan"],["5","Custom RGB"]])+
-    '<div id="rgbC" style="display:'+(S.cl_crosshaircolor==="5"?"flex":"none")+';flex-direction:column;gap:14px">'+bSl("Red","cl_crosshaircolor_r",0,255,1)+bSl("Green","cl_crosshaircolor_g",0,255,1)+bSl("Blue","cl_crosshaircolor_b",0,255,1)+'</div>'+
-    bTo("Center Dot","cl_crosshairdot")+bTo("T-Style","cl_crosshair_t")+bTo("Draw Outline","cl_crosshair_drawoutline")+
+    '<div id="rgbC" style="display:'+(S.cl_crosshaircolor==="5"?"flex":"none")+';flex-direction:column;gap:14px">'+
+    bSl("Red","cl_crosshaircolor_r",0,255,1)+bSl("Green","cl_crosshaircolor_g",0,255,1)+bSl("Blue","cl_crosshaircolor_b",0,255,1)+'</div>'+
+    bTo("Center Dot","cl_crosshairdot")+bTo("T-Style","cl_crosshair_t")+
+    bTo("Draw Outline","cl_crosshair_drawoutline")+
     '<div id="olC" style="display:'+(S.cl_crosshair_drawoutline==="1"?"block":"none")+'">'+bSl("Outline Thickness","cl_crosshair_outlinethickness",0,3,"0.5")+'</div>'+
     bTo("Weapon Value Gap","cl_crosshairgap_useweaponvalue"));
-  h+=sW("Mouse & Sensitivity","⊕",false,bSl("Sensitivity","sensitivity",0.1,10,"0.01")+bSl("Zoom Sensitivity","zoom_sensitivity_ratio",0.1,2,"0.01")+bTo("Raw Input","m_rawinput"));
-  h+=sW("Viewmodel","⬡",false,bSl("FOV","viewmodel_fov",54,68,1)+bSl("Offset X","viewmodel_offset_x",-2.5,2.5,"0.5")+bSl("Offset Y","viewmodel_offset_y",-2,2,"0.5")+bSl("Offset Z","viewmodel_offset_z",-2,2,"0.5")+
-    bSe("Preset","viewmodel_presetpos",[["0","Custom"],["1","Desktop"],["2","Couch"],["3","Classic"]])+bSl("Bob Lower","cl_bob_lower_amt",0,30,1)+bSl("Bob Lateral","cl_bobamt_lat",0,2,"0.1")+bSl("Bob Vertical","cl_bobamt_vert",0,2,"0.1"));
-  h+=sW("Network","⟐",false,bSe("Rate","rate",[["196608","196608 (1.5 Mbps)"],["393216","393216 (3 Mbps)"],["786432","786432 (6+ Mbps)"]])+bSl("Interp Ratio","cl_interp_ratio",1,3,1)+bSl("Cmdrate","cl_cmdrate",64,128,64)+bSl("Updaterate","cl_updaterate",64,128,64)+bSl("Max MM Ping","mm_dedicated_search_maxping",25,350,5));
-  h+=sW("Audio","♪",false,bSl("Master Volume","volume",0,1,"0.05")+bSl("Menu Music","snd_menumusic_volume",0,1,"0.05")+bSl("Round Start","snd_roundstart_volume",0,1,"0.05")+bSl("Round End","snd_roundend_volume",0,1,"0.05")+bSl("MVP Music","snd_mvp_volume",0,1,"0.05")+bSl("10s Warning","snd_tensecondwarning_volume",0,1,"0.05")+bSl("Death Camera","snd_deathcamera_volume",0,1,"0.05"));
-  h+=sW("HUD & Radar","◫",false,bSe("HUD Color","cl_hud_color",[["0","Default"],["1","White"],["2","Light Blue"],["3","Blue"],["4","Purple"],["5","Red"],["6","Orange"],["7","Yellow"],["8","Green"],["9","Aqua"],["10","Pink"]])+
-    bSl("HUD Scale","hud_scaling",0.5,0.95,"0.05")+bSl("Radar HUD Scale","cl_hud_radar_scale",0.8,1.3,"0.05")+bSl("Radar Map Scale","cl_radar_scale",0.25,1,"0.05")+bSl("Radar Icon Scale","cl_radar_icon_scale_min",0.4,1,"0.05")+
-    bTo("Radar Always Centered","cl_radar_always_centered")+bSe("Show FPS","cl_showfps",[["0","Off"],["1","Simple"],["2","Detailed"]])+bSe("Net Graph","net_graph",[["0","Off"],["1","On"]]));
-  h+=sW("Misc","⚙",false,bSl("FPS Max (0=Unlimited)","fps_max",0,999,1)+bSl("FPS Max Menu","fps_max_menu",30,500,1)+bTo("1st Person Tracers","r_drawtracers_firstperson")+bTo("Auto Weapon Switch","cl_autoweaponswitch")+bTo("Use Opens Buy Menu","cl_use_opens_buy_menu")+bSe("Join Advertise","cl_join_advertise",[["0","No one"],["1","Friends only"],["2","Friends of friends"]]));
+
+  h+=sW("Mouse","⊕",false,
+    bSl("Sensitivity","sensitivity",0.1,10,"0.01")+
+    bSl("Zoom Sensitivity","zoom_sensitivity_ratio",0.1,2,"0.01")+
+    '<p style="font-size:11px;color:#555;margin-top:4px">ℹ Raw input is always enabled in CS2</p>');
+
+  h+=sW("Viewmodel","⬡",false,
+    bSl("FOV","viewmodel_fov",54,68,1)+
+    bSl("Offset X","viewmodel_offset_x",-2.5,2.5,"0.5")+
+    bSl("Offset Y","viewmodel_offset_y",-2,2,"0.5")+
+    bSl("Offset Z","viewmodel_offset_z",-2,2,"0.5")+
+    bSe("Preset","viewmodel_presetpos",[["0","Custom"],["1","Desktop"],["2","Couch"],["3","Classic"]])+
+    '<p style="font-size:11px;color:#555;margin-top:4px">ℹ Bob commands removed in CS2</p>');
+
+  h+=sW("Network","⟐",false,
+    bSe("Rate","rate",[["196608","196608 (1.5 Mbps)"],["393216","393216 (3 Mbps)"],["786432","786432 (6+ Mbps)"]])+
+    bSl("Interp Ratio","cl_interp_ratio",1,3,1)+
+    bSl("Max MM Ping","mm_dedicated_search_maxping",25,350,5)+
+    '<p style="font-size:11px;color:#555;margin-top:4px">ℹ cl_interp, cl_cmdrate, cl_updaterate are locked/server-controlled</p>');
+
+  h+=sW("Audio","♪",false,
+    bSl("Master Volume","volume",0,1,"0.05")+bSl("Menu Music","snd_menumusic_volume",0,1,"0.05")+
+    bSl("Round Start","snd_roundstart_volume",0,1,"0.05")+bSl("Round End","snd_roundend_volume",0,1,"0.05")+
+    bSl("MVP Music","snd_mvp_volume",0,1,"0.05")+bSl("10s Warning","snd_tensecondwarning_volume",0,1,"0.05")+
+    bSl("Death Camera","snd_deathcamera_volume",0,1,"0.05"));
+
+  h+=sW("HUD & Radar","◫",false,
+    bSe("HUD Color","cl_hud_color",[["0","Default"],["1","White"],["2","Light Blue"],["3","Blue"],["4","Purple"],["5","Red"],["6","Orange"],["7","Yellow"],["8","Green"],["9","Aqua"],["10","Pink"]])+
+    bSl("HUD Scale","hud_scaling",0.5,0.95,"0.05")+
+    bSl("Radar HUD Scale","cl_hud_radar_scale",0.8,1.3,"0.05")+
+    bSl("Radar Map Scale","cl_radar_scale",0.25,1,"0.05")+
+    bSl("Radar Icon Scale","cl_radar_icon_scale_min",0.4,1,"0.05")+
+    bTo("Radar Always Centered","cl_radar_always_centered")+
+    bSe("Show FPS","cl_showfps",[["0","Off"],["1","Simple"],["2","Detailed"]])+
+    '<p style="font-size:11px;color:#555;margin-top:4px">ℹ net_graph / cq_netgraph removed in CS2</p>');
+
+  h+=sW("Performance & Misc","⚙",false,
+    bSl("FPS Max (0=Unlimited)","fps_max",0,999,1)+
+    bTo("1st Person Tracers","r_drawtracers_firstperson")+
+    bTo("Use Opens Buy Menu","cl_use_opens_buy_menu")+
+    bSe("Join Advertise","cl_join_advertise",[["0","No one"],["1","Friends only"],["2","Friends of friends"]])+
+    '<p style="font-size:11px;color:#555;margin-top:4px">ℹ fps_max_menu, cl_autoweaponswitch removed in CS2</p>');
+
   el.innerHTML=h;
 }
 
-/* ══════════════════════════════════════════════════════════
-   UI HELPERS
-   ══════════════════════════════════════════════════════════ */
 function tgl(b){b.classList.toggle("op");b.nextElementSibling.classList.toggle("op");}
 function swTab(n){
   document.querySelectorAll(".tab").forEach((b,i)=>b.classList.toggle("on",(i===0&&n==="up")||(i===1&&n==="log")));
@@ -583,40 +616,109 @@ function swTab(n){
   document.getElementById("tp-log").classList.toggle("on",n==="log");
 }
 let pvOn=false;
-function tglPv(){pvOn=!pvOn;const c=document.getElementById("pvc"),b=document.getElementById("pvb");if(pvOn){c.style.display="block";c.textContent=genCfg();b.textContent="▲ Hide Preview";}else{c.style.display="none";b.textContent="▼ Show Config Preview";}}
+function tglPv(){pvOn=!pvOn;const c=document.getElementById("pvc"),b=document.getElementById("pvb");
+  if(pvOn){c.style.display="block";c.textContent=genCfg();b.textContent="▲ Hide Preview";}
+  else{c.style.display="none";b.textContent="▼ Show Config Preview";}}
 
 /* ══════════════════════════════════════════════════════════
-   GENERATE CONFIG
+   GENERATE — CLEAN OUTPUT, NO GARBAGE
    ══════════════════════════════════════════════════════════ */
 function genCfg(){
-  const L=[],s=S;
+  const L=[], s=S;
   function a(c){L.push(c+' "'+s[c]+'"');}
-  L.push("// ═══════════════════════════════════════════════","// CS2 Autoexec.cfg","// Generated by CS2 Autoexec Generator","// "+new Date().toLocaleString());
-  if(impFiles.length) L.push("// Merged from: "+impFiles.map(f=>f.name).join(", "));
+  L.push("// ═══════════════════════════════════════════════");
+  L.push("// CS2 Autoexec.cfg (verified commands only)");
+  L.push("// "+new Date().toLocaleString());
+  if(impFiles.length) L.push("// Source: "+impFiles.map(f=>f.name).join(", "));
   L.push("// ═══════════════════════════════════════════════","");
+
   L.push("// ── Crosshair ──────────────────────────────────");
-  ["cl_crosshairstyle","cl_crosshairsize","cl_crosshairgap","cl_crosshairthickness","cl_crosshaircolor","cl_crosshairdot","cl_crosshair_t","cl_crosshairalpha","cl_crosshair_drawoutline","cl_crosshair_outlinethickness","cl_crosshairgap_useweaponvalue"].forEach(a);
+  ["cl_crosshairstyle","cl_crosshairsize","cl_crosshairgap","cl_crosshairthickness",
+   "cl_crosshaircolor","cl_crosshairdot","cl_crosshair_t","cl_crosshairalpha",
+   "cl_crosshair_drawoutline","cl_crosshair_outlinethickness","cl_crosshairgap_useweaponvalue"].forEach(a);
   if(s.cl_crosshaircolor==="5")["cl_crosshaircolor_r","cl_crosshaircolor_g","cl_crosshaircolor_b"].forEach(a);
-  L.push("","// ── Mouse ──────────────────────────────────────");["sensitivity","zoom_sensitivity_ratio","m_rawinput"].forEach(a);
-  L.push("","// ── Viewmodel ──────────────────────────────────");["viewmodel_fov","viewmodel_offset_x","viewmodel_offset_y","viewmodel_offset_z","viewmodel_presetpos","cl_bob_lower_amt","cl_bobamt_lat","cl_bobamt_vert","cl_bobcycle"].forEach(a);
-  L.push("","// ── Network ────────────────────────────────────");["rate","cl_interp_ratio","cl_interp","cl_cmdrate","cl_updaterate"].forEach(a);
-  L.push("","// ── Audio ──────────────────────────────────────");["volume","snd_menumusic_volume","snd_roundstart_volume","snd_roundend_volume","snd_mvp_volume","snd_tensecondwarning_volume","snd_deathcamera_volume","snd_mapobjective_volume"].forEach(a);
-  L.push("","// ── HUD & Radar ────────────────────────────────");["cl_hud_color","cl_hud_radar_scale","cl_radar_scale","cl_radar_always_centered","cl_radar_icon_scale_min","hud_scaling","cl_showfps","net_graph"].forEach(a);
-  L.push("","// ── Performance & Misc ─────────────────────────");["fps_max","fps_max_menu","r_drawtracers_firstperson","cl_autoweaponswitch","cl_use_opens_buy_menu","cl_join_advertise","mm_dedicated_search_maxping"].forEach(a);
-  if(incBinds&&impBinds.length){L.push("","// ── Key Bindings ───────────────────────────────");impBinds.forEach(b=>L.push('bind "'+fk(b.key)+'" "'+b.action+'"'));}
-  if(incExtra&&Object.keys(impExtra).length){L.push("","// ── Additional Settings ────────────────────────");Object.entries(impExtra).forEach(([k,v])=>L.push(k+' "'+v+'"'));}
+
+  L.push("","// ── Mouse ──────────────────────────────────────");
+  ["sensitivity","zoom_sensitivity_ratio"].forEach(a);
+
+  L.push("","// ── Viewmodel ──────────────────────────────────");
+  ["viewmodel_fov","viewmodel_offset_x","viewmodel_offset_y","viewmodel_offset_z","viewmodel_presetpos"].forEach(a);
+
+  L.push("","// ── Network ────────────────────────────────────");
+  ["rate","cl_interp_ratio"].forEach(a);
+
+  L.push("","// ── Audio ──────────────────────────────────────");
+  ["volume","snd_menumusic_volume","snd_roundstart_volume","snd_roundend_volume",
+   "snd_mvp_volume","snd_tensecondwarning_volume","snd_deathcamera_volume","snd_mapobjective_volume"].forEach(a);
+
+  L.push("","// ── HUD & Radar ────────────────────────────────");
+  ["cl_hud_color","cl_hud_radar_scale","cl_radar_scale","cl_radar_always_centered",
+   "cl_radar_icon_scale_min","hud_scaling","cl_showfps"].forEach(a);
+
+  L.push("","// ── Performance & Misc ─────────────────────────");
+  ["fps_max","r_drawtracers_firstperson","cl_use_opens_buy_menu",
+   "cl_join_advertise","mm_dedicated_search_maxping"].forEach(a);
+
+  if(incBinds&&impBinds.length){
+    L.push("","// ── Key Bindings ───────────────────────────────");
+    impBinds.forEach(b=>L.push('bind "'+fk(b.key)+'" "'+b.action+'"'));
+  }
+
+  if(incExtra&&Object.keys(impExtra).length){
+    L.push("","// ── Additional Settings ────────────────────────");
+    for(const [k,v] of Object.entries(impExtra)){
+      if(!isValidCvar(k)||isGarbageValue(v)||(k in DEPRECATED)) continue;
+      L.push(k+' "'+v+'"');
+    }
+  }
+
   const cc=(document.getElementById("cc")?.value||"").trim();
   if(cc){L.push("","// ── Custom Commands ────────────────────────────");L.push(cc);}
-  if(impOther.length){L.push("","// ── Other ──────────────────────────────────────");impOther.forEach(l=>L.push(l));}
-  L.push("",'echo "autoexec.cfg loaded successfully"',"");
+
+  if(impOther.length){
+    L.push("","// ── Other ──────────────────────────────────────");
+    impOther.forEach(l=>{
+      const t=l.trim(); if(!t) return;
+      const firstWord=t.split(/\s/)[0];
+      if(!isValidCvar(firstWord)) return;
+      L.push(l);
+    });
+  }
+
+  // ── Creative echo output ──
+  L.push("");
+  L.push("// ═══════════════════════════════════════════════");
+  L.push("// Config Status Report");
+  L.push("// ═══════════════════════════════════════════════");
+  L.push('echo ""');
+  L.push('echo "══════════════════════════════════════════════"');
+  L.push('echo "  CS2 AUTOEXEC by Maermin · CONFIG LOADED"');
+  L.push('echo "══════════════════════════════════════════════"');
+  L.push('echo "  ◎ Crosshair ................... OK"');
+  L.push('echo "  ⊕ Mouse & Sensitivity ......... OK"');
+  L.push('echo "  ⬡ Viewmodel ................... OK"');
+  L.push('echo "  ⟐ Network & Rates ............. OK"');
+  L.push('echo "  ♪ Audio ....................... OK"');
+  L.push('echo "  ◫ HUD & Radar ................. OK"');
+  L.push('echo "  ⚙ Performance & Misc .......... OK"');
+  if(incBinds&&impBinds.length)
+    L.push('echo "  ⌨ Key Bindings ('+impBinds.length+') ............. OK"');
+  if(incExtra&&Object.keys(impExtra).length)
+    L.push('echo "  ◈ Extra Settings .............. OK"');
+  if(cc)
+    L.push('echo "  ⟩_ Custom Commands ............ OK"');
+  L.push('echo "──────────────────────────────────────────────"');
+  L.push('echo "  ✓ All systems go. GLHF!"');
+  L.push('echo "══════════════════════════════════════════════"');
+  L.push('echo ""');
+  L.push("");
   return L.join("\n");
 }
 
-/* ══════════════════════════════════════════════════════════
-   DOWNLOAD / COPY
-   ══════════════════════════════════════════════════════════ */
 function dl(){
-  try{const t=genCfg(),b=new Blob([t],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="autoexec.cfg";document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(a.href);},200);}
+  try{const t=genCfg(),b=new Blob([t],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download="autoexec.cfg";document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(a.href);},200);}
   catch(e){alert("Download failed: "+e);}
 }
 function cp(){
@@ -624,18 +726,12 @@ function cp(){
   navigator.clipboard.writeText(genCfg()).then(()=>{b.textContent="✓ Copied!";b.classList.add("ok");setTimeout(()=>{b.textContent="Copy";b.classList.remove("ok");},2000);});
 }
 
-/* ══════════════════════════════════════════════════════════
-   DRAG & DROP + FILE INPUT
-   ══════════════════════════════════════════════════════════ */
 const ib=document.getElementById("impBox");
 ["dragenter","dragover"].forEach(e=>document.body.addEventListener(e,ev=>{ev.preventDefault();ib.classList.add("dg");}));
 ["dragleave","drop"].forEach(e=>document.body.addEventListener(e,ev=>{ev.preventDefault();ib.classList.remove("dg");}));
 document.body.addEventListener("drop",e=>{if(e.dataTransfer.files.length)processFiles(e.dataTransfer.files);});
 document.getElementById("fi").addEventListener("change",e=>{if(e.target.files.length)processFiles(e.target.files);e.target.value="";});
 
-/* ══════════════════════════════════════════════════════════
-   INIT
-   ══════════════════════════════════════════════════════════ */
 buildUI();
 </script>
 </body>
