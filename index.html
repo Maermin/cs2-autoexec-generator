@@ -71,6 +71,23 @@ select.cs{width:100%;padding:8px 10px;background:var(--ibg);border:1px solid rgb
 .ftr{text-align:center;font:400 11px var(--mono);color:#333;margin-top:24px}.ftr span{color:#555}
 .dbg{margin-top:8px;padding:10px;background:rgba(0,0,0,0.4);border:1px solid rgba(100,200,100,0.15);border-radius:5px;font:400 11px var(--mono);color:#6a6;max-height:200px;overflow:auto;line-height:1.6;display:none}
 .dbg.on{display:block}.dbg .w{color:#fa0}.dbg .e{color:#f55}.dbg .m{color:#6c6}
+/* ── Crosshair Preview ──────────────────────────────── */
+.chpv-wrap{margin-bottom:6px;padding:14px 0 10px;display:flex;flex-direction:column;align-items:center;gap:8px;border-bottom:1px solid rgba(245,166,35,0.07)}
+.chpv-label{font:700 10px var(--ui);color:#4a5260;text-transform:uppercase;letter-spacing:2px}
+#chCanvas{border:1px solid rgba(245,166,35,0.18);border-radius:8px;display:block;background:#0c0c0e;box-shadow:0 0 32px rgba(0,0,0,0.7),inset 0 0 60px rgba(0,0,0,0.5)}
+/* ── Share Code ─────────────────────────────────────── */
+.chsc{padding:10px 0 4px;border-top:1px solid rgba(245,166,35,0.07);display:flex;flex-direction:column;gap:8px}
+.scRow{display:flex;gap:8px;align-items:center}
+.scInp{flex:1;padding:7px 10px;background:rgba(0,0,0,0.5);border:1px solid rgba(245,166,35,0.18);border-radius:3px;color:#aaa;font:400 12px var(--mono);letter-spacing:0.5px;min-width:0;outline:none;transition:border-color .15s}
+.scInp:focus{border-color:rgba(245,166,35,0.4);color:#ccc}
+.scInp[readonly]{color:#566;cursor:default;border-color:rgba(245,166,35,0.08)}
+.scBtn{padding:7px 13px;border-radius:3px;border:1px solid rgba(245,166,35,0.3);background:rgba(245,166,35,0.08);color:var(--a);font:700 11px var(--ui);text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:background .15s;white-space:nowrap}
+.scBtn:hover{background:rgba(245,166,35,0.18)}
+.scBtnG{border-color:rgba(100,200,100,0.25);background:rgba(100,200,100,0.06);color:#6c6}
+.scBtnG:hover{background:rgba(100,200,100,0.14)}
+.scBtnG.ok{background:rgba(100,200,100,0.2);color:#8e8}
+.scSt{font:400 11px var(--mono);color:transparent;min-height:18px;transition:color .2s}
+.scSt.ok{color:#5c5}.scSt.err{color:#f66}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(245,166,35,0.2);border-radius:3px}
 </style>
 </head>
@@ -190,33 +207,20 @@ const DEPRECATED = {
 };
 
 /* ══════════════════════════════════════════════════════════
-   GARBAGE FILTER — prevents hex data, brackets, video cfg
-   junk from leaking into the output
+   GARBAGE FILTER
    ══════════════════════════════════════════════════════════ */
 function isGarbageKey(key) {
   if (!key || key.length < 2) return true;
-  // Hex addresses or numeric junk
   if (/^0x[0-9a-f]/i.test(key)) return true;
   if (/^\d+,/.test(key)) return true;
-  // Curly brackets, tildes, special chars
   if (/^[{}~!@#$%^&*()]/.test(key)) return true;
-  // Pure numbers
   if (/^\d+$/.test(key)) return true;
-  // Filenames
   if (/\.(cfg|vcfg|txt|vpk|vtex|res)$/i.test(key)) return true;
-  // Video config internal keys
   if (/^videocfg_/i.test(key)) return true;
-  // Setting/config structure keys
   if (/^setting\./i.test(key)) return true;
-  // SHORT ALL-UPPERCASE tokens (2-4 chars like GXS, TFL, PVC, DTR, SWD)
-  // Real CS2 cvars are always lowercase with underscores
   if (/^[A-Z]{2,5}$/.test(key)) return true;
-  // Keys that are ALL uppercase (any length) — not valid cvars
   if (/^[A-Z0-9_]+$/.test(key) && key === key.toUpperCase() && !/^[A-Z]{1}_/.test(key)) return true;
-  // Very short keys without underscores (not valid cvars)
   if (key.length <= 4 && !key.includes("_")) return true;
-  // Keys must look like valid cvars: lowercase, may have underscores
-  // Reject keys that don't contain at least one lowercase letter
   if (!/[a-z]/.test(key)) return true;
   return false;
 }
@@ -228,28 +232,18 @@ function isGarbageValue(val) {
   return false;
 }
 
-/* Whitelist approach: only allow things that look like real CS2 cvars/commands */
 function isValidCvar(key) {
   if (!key || key.length < 2) return false;
-  // Must contain at least one lowercase letter (all real cvars do)
   if (!/[a-z]/.test(key)) return false;
-  // Block filenames
   if (/\.(cfg|vcfg|txt|vpk|vtex|res)$/i.test(key)) return false;
-  // Block hex
   if (/^0x/i.test(key)) return false;
-  // Block numeric junk
   if (/^\d/.test(key)) return false;
-  // Block special chars at start
   if (/^[{}~!@#$%^&*()<>]/.test(key)) return false;
-  // Must look like a cvar: lowercase+underscores, or known bare words
   const BARE_OK = new Set(["sensitivity","volume","rate","bind","unbind","alias",
     "echo","exec","clear","status","quit","exit","disconnect","retry","host_writeconfig"]);
   if (BARE_OK.has(key)) return true;
-  // Most cvars contain underscores
   if (key.includes("_") && /^[a-z][a-z0-9_+]*$/i.test(key)) return true;
-  // Allow +command style
   if (/^\+[a-z]/.test(key)) return true;
-  // Allow longer lowercase-only words (like "toggleconsole", "buymenu" etc)
   if (key.length >= 6 && /^[a-z][a-z0-9]+$/.test(key)) return true;
   return false;
 }
@@ -339,15 +333,9 @@ function parseCfgFmt(text, result, filename) {
     const bm=t.match(/^bind\s+"?([^"\s]+)"?\s+"?(.+?)"?\s*$/i);
     if(bm){result.binds.push({key:bm[1],action:bm[2].replace(/"$/,"")});return;}
     const m1=t.match(/^(\S+)\s+"([^"]*)"\s*$/);
-    if(m1){
-      checkAndAdd(m1[1],m1[2],result,filename);
-      return;
-    }
+    if(m1){checkAndAdd(m1[1],m1[2],result,filename);return;}
     const m2=t.match(/^(\S+)\s+(\S+)\s*$/);
-    if(m2){
-      checkAndAdd(m2[1],m2[2],result,filename);
-      return;
-    }
+    if(m2){checkAndAdd(m2[1],m2[2],result,filename);return;}
     result.other.push(t);
   });
 }
@@ -370,25 +358,18 @@ function matchFlat(flat, result, filename) {
   let matched=0;
   for(const [k,v] of Object.entries(flat)){
     const bare = k.includes(".")?k.split(".").pop():k;
-
-    // Skip garbage
     if (!isValidCvar(bare) || isGarbageValue(v)) continue;
-
-    // Deprecated?
     if(bare in DEPRECATED){
       if(!deprecatedFound.find(d=>d.cmd===bare))
         deprecatedFound.push({cmd:bare, reason:DEPRECATED[bare], val:String(v)});
       dbg("  SKIP "+bare+" ("+DEPRECATED[bare]+")","w");
       continue;
     }
-
     if(bare in DEF){ result.cvars[bare]=String(v); matched++; }
-
     const parts=k.split(".");
     const isBind=parts.some(p=>/^(bindings|keys)$/i.test(p));
     if(isBind&&!/^(bindings|keys)$/i.test(bare)&&bare&&v)
       result.binds.push({key:bare,action:String(v)});
-
     if(!(bare in DEF)&&!isBind&&isValidCvar(bare)&&!isGarbageValue(String(v)))
       result.extra[bare]=String(v);
   }
@@ -455,12 +436,19 @@ function processFiles(fl){
   });
 }
 
-function afterImport(){syncUI();renderLog();renderBinds();renderExtra();renderDep();swTab("log");}
+function afterImport(){syncUI();updPrev();renderLog();renderBinds();renderExtra();renderDep();swTab("log");}
 
 /* ══════════════════════════════════════════════════════════
    SYNC UI
    ══════════════════════════════════════════════════════════ */
 function syncUI(){
+  // Guard: clamp crosshair values back into valid slider ranges to prevent invisible preview
+  const clamp=(v,mn,mx,fb)=>{const n=parseFloat(v);return (isNaN(n)||n<mn||n>mx)?String(fb):String(n);};
+  S.cl_crosshairsize      = clamp(S.cl_crosshairsize,      0,10,  2.5);
+  S.cl_crosshairgap       = clamp(S.cl_crosshairgap,      -5, 5, -1);
+  S.cl_crosshairthickness = clamp(S.cl_crosshairthickness,  0, 6,  0.5);
+  S.cl_crosshairalpha     = clamp(S.cl_crosshairalpha,      0,255,255);
+  S.cl_crosshair_outlinethickness = clamp(S.cl_crosshair_outlinethickness, 0, 3, 1);
   for(const [key,val] of Object.entries(S)){
     document.querySelectorAll('input[type="range"][data-c="'+key+'"]').forEach(el=>{el.value=val;});
     document.querySelectorAll('input[type="number"][data-c="'+key+'"]').forEach(el=>{el.value=val;});
@@ -469,13 +457,360 @@ function syncUI(){
   }
   updCond();
 }
+
 function updCond(){
   const r=document.getElementById("rgbC"); if(r)r.style.display=S.cl_crosshaircolor==="5"?"flex":"none";
   const o=document.getElementById("olC"); if(o)o.style.display=S.cl_crosshair_drawoutline==="1"?"block":"none";
+  updPrev();
 }
+
 function onR(c,v){S[c]=v;document.querySelectorAll('[data-c="'+c+'"]').forEach(el=>{if(el.tagName!=="BUTTON")el.value=v;});updCond();}
 function onS(c,v){S[c]=v;updCond();}
 function onT(c,b){const on=S[c]==="1";S[c]=on?"0":"1";b.classList.toggle("on",!on);updCond();}
+
+/* ══════════════════════════════════════════════════════════
+   CROSSHAIR PREVIEW
+   ══════════════════════════════════════════════════════════ */
+const CH_COLORS = {
+  "1":[0,255,0],
+  "2":[255,220,0],
+  "3":[50,80,255],
+  "4":[0,230,255]
+};
+
+function getCHColor(){
+  const c = S.cl_crosshaircolor || "1";
+  if(c==="5") return [parseInt(S.cl_crosshaircolor_r)||50, parseInt(S.cl_crosshaircolor_g)||250, parseInt(S.cl_crosshaircolor_b)||50];
+  return CH_COLORS[c] || [255,255,255];
+}
+
+function updPrev(){
+  const canvas = document.getElementById("chCanvas");
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W=canvas.width, H=canvas.height, cx=W/2, cy=H/2;
+
+  // --- Read & clamp values ---
+  const _sz = parseFloat(S.cl_crosshairsize);
+  const _gp = parseFloat(S.cl_crosshairgap);
+  const _th = parseFloat(S.cl_crosshairthickness);
+  const _al = parseInt(S.cl_crosshairalpha);
+  const _ol = parseFloat(S.cl_crosshair_outlinethickness);
+
+  const szRaw  = isNaN(_sz) ? 2.5 : Math.max(0.1, Math.min(10, _sz));
+  const gpRaw  = isNaN(_gp) ? -1  : Math.max(-5,  Math.min(5,  _gp));
+  const thRaw  = isNaN(_th) ? 0.5 : Math.max(0.1, Math.min(6,  _th));
+  const alpha  = Math.max(0.05, Math.min(1, (isNaN(_al) ? 255 : _al) / 255));
+  const olRaw  = isNaN(_ol) ? 1 : Math.max(0, Math.min(3, _ol));
+
+  // Scale: 1 CS2 unit = SC pixels
+  const SC = 12;
+  const size  = szRaw * SC;
+  const gap   = gpRaw * SC;  // can be negative (arms overlap center)
+  const thick = Math.max(2, thRaw * SC);
+  const olPx  = S.cl_crosshair_drawoutline==="1" ? Math.max(0.8, olRaw * SC * 0.3) : 0;
+
+  const dot    = S.cl_crosshairdot==="1";
+  const tStyle = S.cl_crosshair_t==="1";
+
+  const [cr,cg,cb] = getCHColor();
+  const fgCol = `rgba(${cr},${cg},${cb},${alpha})`;
+  const olCol = `rgba(0,0,0,${Math.min(1, alpha*0.92+0.05)})`;
+
+  // --- Background ---
+  ctx.fillStyle = "#0c0c0e";
+  ctx.fillRect(0,0,W,H);
+
+  // Subtle grid lines
+  ctx.strokeStyle = "rgba(255,255,255,0.05)";
+  ctx.lineWidth = 1;
+  for(let x=0;x<W;x+=20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // Faint center dot for reference
+  ctx.fillStyle = "rgba(255,255,255,0.06)";
+  ctx.fillRect(cx-0.5, cy-0.5, 1, 1);
+
+  // --- Draw pass (outline then fill) ---
+  function drawCrosshair(col, extra) {
+    const t  = thick + extra * 2;
+    const ht = t / 2;
+    ctx.fillStyle = col;
+    // Right arm: starts at cx+gap, extends right by size
+    ctx.fillRect(cx + gap,        cy - ht, size, t);
+    // Left arm:  ends at cx-gap, goes left by size
+    ctx.fillRect(cx - gap - size, cy - ht, size, t);
+    // Bottom arm
+    ctx.fillRect(cx - ht, cy + gap,        t, size);
+    // Top arm (hidden in T-style)
+    if (!tStyle)
+      ctx.fillRect(cx - ht, cy - gap - size, t, size);
+  }
+
+  if (olPx > 0) drawCrosshair(olCol, olPx);
+  drawCrosshair(fgCol, 0);
+
+  // --- Center dot ---
+  if (dot) {
+    const hs = thick / 2;
+    if (olPx > 0) {
+      ctx.fillStyle = olCol;
+      ctx.fillRect(cx-hs-olPx, cy-hs-olPx, thick+olPx*2, thick+olPx*2);
+    }
+    ctx.fillStyle = fgCol;
+    ctx.fillRect(cx-hs, cy-hs, thick, thick);
+  }
+
+  // --- Label ---
+  ctx.font = "bold 9px 'JetBrains Mono',monospace";
+  ctx.fillStyle = "rgba(255,255,255,0.22)";
+  ctx.fillText("PREVIEW", 7, H-7);
+
+  // --- Update share code output ---
+  try { const scOut=document.getElementById("scOut"); if(scOut) scOut.value=encSC(); } catch(e){}
+}
+
+
+function getCHColor(){
+  const c = S.cl_crosshaircolor || "1";
+  if(c==="5") return [parseInt(S.cl_crosshaircolor_r)||50, parseInt(S.cl_crosshaircolor_g)||250, parseInt(S.cl_crosshaircolor_b)||50];
+  return CH_COLORS[c] || [255,255,255];
+}
+
+function updPrev(){
+  const canvas = document.getElementById("chCanvas");
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+  const SC = 9; // scale: CS2 units → pixels
+
+  // Clamp all values so garbage data from a wrong share code never hides the preview
+  const _sz  = parseFloat(S.cl_crosshairsize);
+  const _gp  = parseFloat(S.cl_crosshairgap);
+  const _th  = parseFloat(S.cl_crosshairthickness);
+  const _al  = parseInt(S.cl_crosshairalpha);
+  const size  = Math.max(2, Math.min(W*0.45, (isNaN(_sz) ? 2.5 : Math.min(_sz, 10))  * SC));
+  const gap   = (isNaN(_gp) ? -1 : Math.max(-5, Math.min(5, _gp))) * SC;
+  const thick = Math.max(1.5, Math.min(30,  (isNaN(_th) ? 0.5 : Math.min(_th, 6))   * SC));
+  const alpha = Math.max(0.05, Math.min(1,  (isNaN(_al) ? 255  : Math.min(_al, 255)) / 255));
+  const dot   = S.cl_crosshairdot === "1";
+  const tSt   = S.cl_crosshair_t  === "1";
+  const dOl   = S.cl_crosshair_drawoutline === "1";
+  const olT   = dOl ? Math.max(1, (parseFloat(S.cl_crosshair_outlinethickness) || 1) * SC * 0.28) : 0;
+
+  const [cr,cg,cb] = getCHColor();
+  const fgCol = `rgba(${cr},${cg},${cb},${alpha})`;
+  const olCol = `rgba(0,0,0,${Math.min(1, alpha * 0.9 + 0.05)})`;
+
+  // Background
+  ctx.fillStyle = "#111214";
+  ctx.fillRect(0, 0, W, H);
+
+  // Grid
+  ctx.strokeStyle = "rgba(255,255,255,0.045)";
+  ctx.lineWidth = 1;
+  for(let x=0;x<W;x+=20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // Draw a crosshair pass (outline or color)
+  function pass(col, extra){
+    const t  = thick + extra * 2;
+    const ht = t / 2;
+    ctx.fillStyle = col;
+    // Right arm
+    ctx.fillRect(cx + gap,          cy - ht, size, t);
+    // Left arm
+    ctx.fillRect(cx - gap - size,   cy - ht, size, t);
+    // Bottom arm
+    ctx.fillRect(cx - ht, cy + gap,          t, size);
+    // Top arm (skip if T-style)
+    if(!tSt)
+      ctx.fillRect(cx - ht, cy - gap - size, t, size);
+  }
+
+  if(olT > 0) pass(olCol, olT); // outline first
+  pass(fgCol, 0);                // colored lines on top
+
+  // Center dot
+  if(dot){
+    const hs = thick / 2;
+    if(olT > 0){
+      ctx.fillStyle = olCol;
+      ctx.fillRect(cx - hs - olT, cy - hs - olT, thick + olT*2, thick + olT*2);
+    }
+    ctx.fillStyle = fgCol;
+    ctx.fillRect(cx - hs, cy - hs, thick, thick);
+  }
+
+  // Label
+  ctx.font = "9px 'JetBrains Mono',monospace";
+  ctx.fillStyle = "rgba(255,255,255,0.2)";
+  ctx.fillText("PREVIEW", 6, H - 6);
+
+  // Update share code output
+  try{
+    const scOut = document.getElementById("scOut");
+    if(scOut) scOut.value = encSC();
+  }catch(e){}
+}
+
+/* ══════════════════════════════════════════════════════════
+   CROSSHAIR SHARE CODES — real Valve / CS2 format
+   Verified against akiver/csgo-sharecode (MIT)
+   Dictionary: 57 chars, no I / l / 0 / 1
+   BigInt is little-endian; after decode → reverse → big-endian:
+     BE[0]  = header/version byte
+     BE[1]  = 1 (sub-version)
+     BE[2]  = gap (signed int8) × 10
+     BE[3]  = outline × 2
+     BE[4]  = R   BE[5] = G   BE[6] = B
+     BE[7]  = alpha
+     BE[8]  = unknown (preserved as-is)
+     BE[9]  = fixedCrosshairGap × 10  (default 30 = 3.0)
+     BE[10] = bit3=hasOutline | bit0=deployedWeaponGap | hi-nibble=innerSplitAlpha×10
+     BE[11] = lo-nibble=outerSplitAlpha×10 | hi-nibble=splitSizeRatio×10
+     BE[12] = thickness × 10
+     BE[13] = lo-nibble = (style<<1) | hi-nibble = hasDot|hasAlpha<<2|isTStyle<<3
+     BE[14] = size × 10
+     BE[15..17] = 0
+   ══════════════════════════════════════════════════════════ */
+const VALVE_DICT     = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefhijkmnopqrstuvwxyz23456789";
+const VALVE_DICT_LEN = BigInt(VALVE_DICT.length); // 57n
+
+/* Share code → big-endian 18-byte array */
+function codeToBytes(code) {
+  const clean = code.trim().replace(/^CSGO-?/i, "").replace(/-/g, "");
+  if (clean.length !== 25) throw new Error("Ungültiger Code (muss 25 Zeichen haben, hat "+clean.length+")");
+  let big = 0n;
+  for (let i = clean.length - 1; i >= 0; i--) {
+    const idx = VALVE_DICT.indexOf(clean[i]);
+    if (idx < 0) throw new Error("Ungültiges Zeichen: '"+clean[i]+"'");
+    big = big * VALVE_DICT_LEN + BigInt(idx);
+  }
+  const le = [];
+  for (let i = 0; i < 18; i++) { le.push(Number(big & 0xFFn)); big >>= 8n; }
+  return le.reverse(); // big-endian
+}
+
+/* Big-endian 18-byte array → share code string */
+function bytesToCode(be) {
+  let big = 0n;
+  for (let i = 0; i < 18; i++) big = (big << 8n) | BigInt(be[i]);
+  let raw = "";
+  for (let i = 0; i < 25; i++) { raw += VALVE_DICT[Number(big % VALVE_DICT_LEN)]; big /= VALVE_DICT_LEN; }
+  return "CSGO-" + raw.match(/.{5}/g).join("-");
+}
+
+/* Color index: match R,G,B to CS2 preset, fallback 5 = Custom */
+function matchColorPreset(r,g,b){
+  const tol=60;
+  if(Math.abs(r-50)<tol && Math.abs(g-250)<tol && Math.abs(b-50)<tol)  return "1"; // green
+  if(Math.abs(r-255)<tol && Math.abs(g-220)<tol && Math.abs(b-0)<tol)   return "2"; // yellow
+  if(Math.abs(r-50)<tol  && Math.abs(g-80)<tol  && Math.abs(b-255)<tol) return "3"; // blue
+  if(Math.abs(r-0)<tol   && Math.abs(g-230)<tol && Math.abs(b-255)<tol) return "4"; // cyan
+  return "5"; // custom
+}
+
+/* Decode Valve share code → crosshair cvars */
+function decSC(code) {
+  const be = codeToBytes(code);
+  const sg = be[2] > 127 ? be[2] - 256 : be[2];
+  const gap       = +(sg / 10).toFixed(1);
+  const outline   = +(be[3] / 2).toFixed(1);
+  const r=be[4], g=be[5], b=be[6];
+  const alpha     = be[7];
+  const deployedGap = !!(be[10] & 1);
+  const hasOutline  = !!(be[10] & 8);
+  const thickness = +(be[12] / 10).toFixed(1);
+  const style     = (be[13] & 0xF) >> 1;
+  const hasDot    = !!((be[13] >> 4) & 1);
+  const isTStyle  = !!((be[13] >> 4) & 8);
+  const size      = +(be[14] / 10).toFixed(1);
+  const color     = matchColorPreset(r, g, b);
+  return {
+    cl_crosshairsize:              String(Math.max(0.5, Math.min(10, size))),
+    cl_crosshairgap:               String(Math.max(-5, Math.min(5, gap))),
+    cl_crosshairthickness:         String(Math.max(0, Math.min(6, thickness))),
+    cl_crosshairalpha:             String(Math.max(0, Math.min(255, alpha))),
+    cl_crosshaircolor_r:           String(r),
+    cl_crosshaircolor_g:           String(g),
+    cl_crosshaircolor_b:           String(b),
+    cl_crosshairstyle:             String(Math.max(0, Math.min(5, style))),
+    cl_crosshairdot:               hasDot    ? "1" : "0",
+    cl_crosshair_t:                isTStyle  ? "1" : "0",
+    cl_crosshair_drawoutline:      hasOutline? "1" : "0",
+    cl_crosshair_outlinethickness: String(Math.max(0, Math.min(3, outline))),
+    cl_crosshaircolor:             color,
+    cl_crosshairgap_useweaponvalue:deployedGap ? "1" : "0",
+  };
+}
+
+/* Encode current settings → Valve share code */
+function encSC() {
+  const be = new Uint8Array(18);
+  be[0] = 1; be[1] = 1;
+  const gapInt = Math.round((parseFloat(S.cl_crosshairgap)||0) * 10);
+  be[2] = gapInt < 0 ? (gapInt + 256) & 0xFF : gapInt & 0xFF;
+  be[3] = Math.round((parseFloat(S.cl_crosshair_outlinethickness)||0) * 2) & 0xFF;
+  be[4] = parseInt(S.cl_crosshaircolor_r)||50;
+  be[5] = parseInt(S.cl_crosshaircolor_g)||250;
+  be[6] = parseInt(S.cl_crosshaircolor_b)||50;
+  be[7] = parseInt(S.cl_crosshairalpha)||255;
+  be[8] = 0;
+  be[9] = 30; // fixedCrosshairGap default 3.0
+  const deployedGap = S.cl_crosshairgap_useweaponvalue==="1" ? 1 : 0;
+  const hasOutline  = S.cl_crosshair_drawoutline==="1" ? 8 : 0;
+  be[10] = deployedGap | hasOutline;
+  be[11] = (10 & 0xF) | ((10 & 0xF) << 4); // outerSplitAlpha=1.0, splitSizeRatio=1.0
+  be[12] = Math.round((parseFloat(S.cl_crosshairthickness)||0.5) * 10) & 0xFF;
+  const style    = parseInt(S.cl_crosshairstyle)||4;
+  const hasDot   = S.cl_crosshairdot==="1" ? 1 : 0;
+  const hasAlpha = 4;
+  const isTStyle = S.cl_crosshair_t==="1" ? 8 : 0;
+  be[13] = ((style << 1) & 0xF) | (((hasDot | hasAlpha | isTStyle) & 0xF) << 4);
+  be[14] = Math.round((parseFloat(S.cl_crosshairsize)||2.5) * 10) & 0xFF;
+  return bytesToCode(be);
+}
+
+function applyShareCode(){
+  const inp = document.getElementById("scInp");
+  const st  = document.getElementById("scSt");
+  const raw = (inp.value||"").trim();
+  if(!raw){ st.textContent="Paste a code first"; st.className="scSt err"; return; }
+  try{
+    const cfg = decSC(raw);
+    Object.assign(S, cfg);
+    syncUI();
+    // Mirror the exact applied code into the output field
+    const scOut = document.getElementById("scOut");
+    if(scOut) scOut.value = raw.trim();
+    st.textContent = "✓ Crosshair applied!";
+    st.className = "scSt ok";
+    setTimeout(()=>{st.textContent="";st.className="scSt";},3000);
+  }catch(e){
+    st.textContent = "✗ " + e.message;
+    st.className = "scSt err";
+  }
+}
+
+function cpShareCode(){
+  const val = document.getElementById("scOut")?.value;
+  if(!val) return;
+  const btn = document.getElementById("scCopyBtn");
+  navigator.clipboard.writeText(val).then(()=>{
+    btn.textContent="✓ Copied!"; btn.classList.add("ok");
+    setTimeout(()=>{btn.textContent="Copy"; btn.classList.remove("ok");},2000);
+  }).catch(()=>{
+    // fallback
+    const ta=document.createElement("textarea");
+    ta.value=val; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta);
+    btn.textContent="✓ Copied!"; btn.classList.add("ok");
+    setTimeout(()=>{btn.textContent="Copy"; btn.classList.remove("ok");},2000);
+  });
+}
 
 /* ══════════════════════════════════════════════════════════
    RENDER
@@ -552,8 +887,32 @@ function sW(t,ic,op,body){
 function buildUI(){
   const el=document.getElementById("sections"); let h="";
 
+  // ── Crosshair preview HTML ──
+  const chPreviewHTML =
+    '<div class="chpv-wrap">' +
+      '<canvas id="chCanvas" width="260" height="260"></canvas>' +
+      '<span class="chpv-label">Live Preview</span>' +
+    '</div>';
+
+  // ── Share code HTML ──
+  const chShareHTML =
+    '<div class="chsc">' +
+      '<div class="cr" style="margin-bottom:6px"><span class="cl">◈ Share Code</span><span class="cv" style="color:#3a4050;font-size:10px">CS2 crosshair format</span></div>' +
+      '<div class="scRow">' +
+        '<input class="scInp" id="scInp" placeholder="CSGO-XXXXX-XXXXX-XXXXX-XXXXX-XXXXX" autocomplete="off" spellcheck="false" onkeydown="if(event.key===\'Enter\')applyShareCode()">' +
+        '<button class="scBtn" onclick="applyShareCode()">▶ Apply</button>' +
+      '</div>' +
+      '<div class="scRow" style="margin-top:2px">' +
+        '<input class="scInp" id="scOut" readonly placeholder="Your generated code..." title="Your current crosshair as a share code">' +
+        '<button class="scBtn scBtnG" id="scCopyBtn" onclick="cpShareCode()">Copy</button>' +
+      '</div>' +
+      '<div id="scSt" class="scSt"></div>' +
+    '</div>';
+
   h+=sW("Crosshair","◎",true,
-    bSe("Style","cl_crosshairstyle",[["0","0-Default"],["1","1-Default Static"],["2","2-Classic"],["3","3-Classic Dynamic"],["4","4-Classic Static"],["5","5-Legacy"]])+
+    chPreviewHTML +
+    chShareHTML +
+    bSe("Style","cl_crosshairstyle",[["0","0 — Default"],["1","1 — Default Static"],["2","2 — Classic"],["3","3 — Classic Dynamic"],["4","4 — Classic Static"],["5","5 — Legacy"]])+
     bSl("Size","cl_crosshairsize",0,10,"0.5")+bSl("Gap","cl_crosshairgap",-5,5,"0.5")+
     bSl("Thickness","cl_crosshairthickness",0,6,"0.5")+bSl("Alpha","cl_crosshairalpha",0,255,1)+
     bSe("Color","cl_crosshaircolor",[["1","Green"],["2","Yellow"],["3","Blue"],["4","Cyan"],["5","Custom RGB"]])+
@@ -607,6 +966,10 @@ function buildUI(){
     '<p style="font-size:11px;color:#555;margin-top:4px">ℹ fps_max_menu, cl_autoweaponswitch removed in CS2</p>');
 
   el.innerHTML=h;
+
+  // Initial preview draw after DOM is ready
+  requestAnimationFrame(()=>updPrev());
+  setTimeout(()=>updPrev(), 100);
 }
 
 function tgl(b){b.classList.toggle("op");b.nextElementSibling.classList.toggle("op");}
@@ -637,6 +1000,8 @@ function genCfg(){
    "cl_crosshaircolor","cl_crosshairdot","cl_crosshair_t","cl_crosshairalpha",
    "cl_crosshair_drawoutline","cl_crosshair_outlinethickness","cl_crosshairgap_useweaponvalue"].forEach(a);
   if(s.cl_crosshaircolor==="5")["cl_crosshaircolor_r","cl_crosshaircolor_g","cl_crosshaircolor_b"].forEach(a);
+  // Append the share code as a comment
+  try{ L.push('// Share Code: '+encSC()); }catch(e){}
 
   L.push("","// ── Mouse ──────────────────────────────────────");
   ["sensitivity","zoom_sensitivity_ratio"].forEach(a);
