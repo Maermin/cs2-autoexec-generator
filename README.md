@@ -1,5 +1,13 @@
 # CS2 Autoexec Generator
 
+## Live Demo
+
+Try it instantly in your browser — no installation needed:
+
+https://maermin.github.io/cs2-autoexec-generator/
+
+---
+
 ## Overview
 
 The **CS2 Autoexec Generator** is a fully client-side, browser-based tool that allows players to import, merge, edit, and export Counter-Strike 2 configuration files.
@@ -15,6 +23,7 @@ All processing happens locally in the browser.
 
 <img width="1263" height="844" alt="image" src="https://github.com/user-attachments/assets/4eb4954d-3068-4fc6-98c8-7c12d390a641" />
 
+---
 
 ## Key Features
 
@@ -77,9 +86,8 @@ All values update in real time and are reflected in the generated output.
 
 Typical Counter-Strike 2 configuration directories:
 
-Steam\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg
-Steam\userdata<STEAM_ID>\730\local\cfg\
-
+Steam\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg  
+Steam\userdata\<STEAM_ID>\730\local\cfg\
 
 Common supported files include:
 - `cs2_user_convars.vcfg`
@@ -93,6 +101,15 @@ Common supported files include:
 
 ## Usage
 
+### Option 1: Use Online (Recommended)
+1. Open the live tool: https://maermin.github.io/cs2-autoexec-generator/
+2. Import your CS2 configuration files
+3. Adjust settings using the visual editor
+4. Review the generated configuration in the preview
+5. Download or copy the `autoexec.cfg`
+6. Place the file in your CS2 `cfg` directory
+
+### Option 2: Run Locally
 1. Clone the repository or download it as a ZIP
 2. Open `index.html` (or `cs2-autoexec-generator.html`) in a browser
 3. Import your CS2 configuration files
@@ -135,13 +152,14 @@ The generated `autoexec.cfg` is:
 
 ## Hosting with GitHub Pages
 
-This project can be hosted using GitHub Pages.
+This project is hosted via GitHub Pages:
 
-Steps:
+https://maermin.github.io/cs2-autoexec-generator/
+
+Steps to deploy yourself:
 1. Rename the HTML file to `index.html` (recommended)
 2. Push to the `main` branch
 3. Enable GitHub Pages (Deploy from branch, root folder)
-
 
 ---
 
